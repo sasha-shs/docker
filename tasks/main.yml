@@ -1,3 +1,22 @@
 #SPDX-License-Identifier: MIT-0
 ---
-# tasks file for docker
+- name: Install required system packages
+  become: true 
+  apt:
+    name: "{{ docker_pre_install_system_packages }}"
+    state: present
+
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: "{{ docker_gpg_key_url }}"
+    state: present
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: "{{ docker_apt_repo }}"
+    state: present
+
+- name: Install Docker
+  apt:
+    name: "{{ docker_packages }}"
+    update_cache: true
